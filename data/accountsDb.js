@@ -7,7 +7,8 @@ module.exports = {
     getById,
     insert,
     update,
-    remove
+    remove,
+    getByName
 };
 
 
@@ -18,6 +19,10 @@ function get () {
 
 function getById (id) {
     return db(TABLE_NAME).where({id});
+}
+
+function getByName (name) {
+    return db(TABLE_NAME).where({name});
 }
 
 function insert (account) {

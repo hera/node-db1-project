@@ -1,6 +1,6 @@
 const express = require("express");
 const accountsDb = require("../../data/accountsDb");
-const { validateAccountData } = require("./accountsHelpers");
+const { validateAccountData, isAccountNameUnique } = require("./accountsMiddleware");
 
 const router = express.Router();
 
@@ -45,12 +45,7 @@ router.get("/:id", (req, res) => {
 
 // Add an account
 
-router.post("/", (req, res) => {
-    if (!validateAccountData(req.body)) {
-        res.status(400).json({
-            error: "Bad request. Please provide valid name and budget.",
-        });
-    }
+router.post("/", validateAccountData, isAccountNameUnique, (req, res) => {
 
     accountsDb.insert({
         name: req.body.name,
@@ -71,17 +66,12 @@ router.post("/", (req, res) => {
             description: error
         });
     });
-});
 
+});
 
 // Edit (update) an account
 
-router.put("/:id", (req, res) => {
-    if (!validateAccountData(req.body)) {
-        res.status(400).json({
-            error: "Bad request. Please provide valid name and budget.",
-        });
-    }
+router.put("/:id", validateAccountData, isAccountNameUnique, (req, res) => {
 
     accountsDb.update(req.params.id, {
         name: req.body.name,
