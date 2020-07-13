@@ -1,7 +1,6 @@
 const express = require("express");
 const accountsDb = require("../../data/accountsDb");
 const { validateAccountData } = require("./accountsHelpers");
-const dbConfig = require("../../data/dbConfig");
 
 const router = express.Router();
 
@@ -100,6 +99,28 @@ router.put("/:id", (req, res) => {
         .catch(error => {
             res.status(500).json({
                 error: "Server error. Could not update an account.",
+                description: error
+            });
+        });
+});
+
+
+// Delete an account
+
+router.delete("/:id", (req, res) => {
+    accountsDb.remove(req.params.id)
+        .then(rowsDeleted => {
+            if (rowsDeleted) {
+                res.status(200).json(rowsDeleted);
+            } else {
+                res.status(404).json({
+                    error: `Not found. Could not delete an account with id ${req.params.id}`
+                });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                error: "Server error. Could not delete an account.",
                 description: error
             });
         });

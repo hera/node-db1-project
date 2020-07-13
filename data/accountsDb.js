@@ -6,7 +6,8 @@ module.exports = {
     get,
     getById,
     insert,
-    update
+    update,
+    remove
 };
 
 
@@ -34,4 +35,10 @@ function update (id, accountData) {
         .then(rows => {
             return getById(id);
         });
+}
+
+function remove (id) {
+    return db(TABLE_NAME)
+        .where({id})
+        .del();
 }
