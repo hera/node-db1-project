@@ -5,7 +5,8 @@ const TABLE_NAME = "accounts";
 module.exports = {
     get,
     getById,
-    insert
+    insert,
+    update
 };
 
 
@@ -23,5 +24,14 @@ function insert (account) {
         .insert(account)
         .then(ids => {
             return getById(ids[0]);
+        });
+}
+
+function update (id, accountData) {
+    return db(TABLE_NAME)
+        .where({id})
+        .update(accountData)
+        .then(rows => {
+            return getById(id);
         });
 }
